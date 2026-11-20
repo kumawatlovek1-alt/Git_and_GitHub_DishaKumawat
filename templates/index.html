@@ -1,0 +1,26 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Flask Project</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to My Flask Project</h1>
+        <p>Git and GitHub DevOps Assignment</p>
+        <button onclick="getData()">Get API Data</button>
+        <pre id="result"></pre>
+    </div>
+
+    <script>
+        async function getData() {
+            const response = await fetch("/api");
+            const data = await response.json();
+
+            document.getElementById("result").textContent =
+                JSON.stringify(data, null, 2);
+        }
+    </script>
+</body>
+</html>

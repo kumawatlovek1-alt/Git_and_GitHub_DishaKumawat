@@ -1,0 +1,29 @@
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f1f5f9;
+    text-align: center;
+    padding: 50px;
+}
+
+.container {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    max-width: 600px;
+    margin: auto;
+}
+
+button {
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+pre {
+    text-align: left;
+    margin-top: 20px;
+}
