@@ -5,6 +5,7 @@ from pymongo import MongoClient
 import os
 import certifi
 import json
+import uuid
 
 load_dotenv()
 
@@ -48,7 +49,8 @@ def submit_todo_item():
 
     todo_item = {
         "itemName": item_name,
-        "itemDescription": item_description
+        "itemDescription": item_description,
+        "itemUUID": str(uuid.uuid4())
     }
 
     result = todo_collection.insert_one(todo_item)
