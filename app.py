@@ -51,12 +51,12 @@ def submit_todo_item():
         "itemDescription": item_description
     }
 
-    todo_collection.insert_one(todo_item)
+    result = todo_collection.insert_one(todo_item)
 
     return jsonify({
-        "message": "Item submitted successfully!"
-    }), 201
-
+    "message": "Item submitted successfully!",
+    "item_id": str(result.inserted_id)
+}), 201
 
 if __name__ == "__main__":
     app.run(debug=True)
