@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 import os
 import certifi
 import uuid
+import hashlib
 
 load_dotenv()
 
@@ -41,7 +42,10 @@ def submit_todo_item():
     todo = {
         "itemName": item_name,
         "itemDescription": item_description,
-        "itemUUID": str(uuid.uuid4())
+        "itemUUID": str(uuid.uuid4()),
+        "itemHash": hashlib.sha256(
+          (item_name + item_description).encode()
+         ).hexdigest()
     }
 
     result = collection.insert_one(todo)
