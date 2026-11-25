@@ -1,11 +1,11 @@
-
-from flask import Flask, render_template, jsonify, request
+﻿from flask import Flask, render_template, jsonify, request
 from dotenv import load_dotenv
 from pymongo import MongoClient
 import os
 import certifi
 import json
 import uuid
+import hashlib
 
 load_dotenv()
 
@@ -47,18 +47,28 @@ def submit_todo_item():
     if not item_name or not item_description:
         return jsonify({"error": "Both fields are required"}), 400
 
+    item_uuid = str(uuid.uuid4())
+
+    item_hash = hashlib.sha256(
+        (item_name + item_description).encode()
+    ).hexdigest()
+
     todo_item = {
         "itemName": item_name,
         "itemDescription": item_description,
-        "itemUUID": str(uuid.uuid4())
+        "itemUUID": item_uuid,
+        "itemHash": item_hash
     }
 
     result = todo_collection.insert_one(todo_item)
 
     return jsonify({
-    "message": "Item submitted successfully!",
-    "item_id": str(result.inserted_id)
-}), 201
+        "message": "Item submitted successfully!",
+        "item_id": str(result.inserted_id),
+        "itemUUID": item_uuid,
+        "itemHash": item_hash
+    }), 201
+
 
 if __name__ == "__main__":
     app.run(debug=True)
