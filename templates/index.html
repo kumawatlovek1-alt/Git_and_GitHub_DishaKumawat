@@ -9,7 +9,7 @@
     <div class="container">
         <h1>My To-Do App</h1>
 
-        <form action="/submittodoitem" method="POST">
+        <form id="todoForm">
             <label for="itemName">Item Name:</label>
             <input
                 type="text"
@@ -32,11 +32,51 @@
 
         <hr>
 
+        <h2>Submitted Item Details</h2>
+        <p><strong>Item ID:</strong> <span id="itemId">Not generated</span></p>
+        <p><strong>Item UUID:</strong> <span id="itemUUID">Not generated</span></p>
+        <p><strong>Item Hash:</strong> <span id="itemHash">Not generated</span></p>
+
+        <p id="message"></p>
+
+        <hr>
+
         <button onclick="getData()">Get API Data</button>
         <pre id="result"></pre>
     </div>
 
     <script>
+        document.getElementById("todoForm").addEventListener("submit", async function(event) {
+            event.preventDefault();
+
+            const formData = new FormData(this);
+
+            try {
+                const response = await fetch("/submittodoitem", {
+                    method: "POST",
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    document.getElementById("message").textContent = data.error;
+                    return;
+                }
+
+                document.getElementById("itemId").textContent = data.item_id;
+                document.getElementById("itemUUID").textContent = data.itemUUID;
+                document.getElementById("itemHash").textContent = data.itemHash;
+                document.getElementById("message").textContent = data.message;
+
+                this.reset();
+
+            } catch (error) {
+                document.getElementById("message").textContent =
+                    "Error submitting item. Please try again.";
+            }
+        });
+
         async function getData() {
             const response = await fetch("/api");
             const data = await response.json();
